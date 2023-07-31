@@ -1,4 +1,5 @@
 "use client";
+import styles from "./index.module.css";
 import ConfigContext from "@/app/store/config-context";
 import { ChangeEvent, useContext } from "react";
 import Button from "../button";
@@ -23,8 +24,9 @@ export default function ConfigForm() {
     configCtx.generateCoverLetter();
   }
 
+  console.log(styles);
   return (
-    <div>
+    <div className={styles["form--container"]}>
       <div>
         <label htmlFor="UserApiKey">Api Key: </label>
         <input
