@@ -16,9 +16,10 @@ async function returnError(message: String) {
 }
 
 export async function POST(req: NextApiRequest) {
-  console.log(process.env.API_KEY);
   const { body } = req;
-  const { apiKey: tempKey, cv, jobDescription } = body;
+
+  const rawData = await readFromStream(body);
+  const { apiKey: tempKey, jobDescription, cv } = JSON.parse(rawData);
 
   const apiKey = process.env.API_KEY ?? tempKey;
 
@@ -34,14 +35,16 @@ export async function POST(req: NextApiRequest) {
 
   try {
     console.log(`inside try ${apiKey}`);
+    const prompt = generateChatCompletionPrompt(cv, jobDescription);
+    console.log("prompt", prompt);
     const completion = await openai.createChatCompletion({
+      messages: prompt,
       model: "gpt-3.5-turbo",
-      messages: generateChatCompletionPrompt(cv, jobDescription),
       temperature: 0.6,
     });
 
-    console.log(JSON.stringify(completion.data));
-    console.log(completion.data.choices[0].message);
+    console.log("data", JSON.stringify(completion.data));
+    console.log("message", completion.data.choices[0].message);
 
     return NextResponse.json({
       result: completion.data.choices[0].message,
@@ -49,20 +52,6 @@ export async function POST(req: NextApiRequest) {
     });
   } catch (error: unknown) {
     console.error(`error occured ${error}`);
-  }
-
-  function generateCompletionPrompt(cv: string, jobDescription: string) {
-    return `You are a highly skilled job seeker who wants to create an effective cover
-          letter tailored to a specific job description. You have your CV and the 
-          job description at hand. Write a compelling cover letter that highlights 
-          your relevant skills and experiences, and demonstrates your enthusiasm 
-          for the position. Remember to address the hiring manager, showcase your 
-          achievements, and explain how your qualifications align with the requirements 
-          of the job. Use a professional and engaging tone throughout the letter.
-          CV: 
-          ${cv}
-          Job Description:
-          ${jobDescription}`;
   }
 
   function generateChatCompletionPrompt(cv: string, jobDescription: string) {
@@ -75,16 +64,29 @@ export async function POST(req: NextApiRequest) {
           their relevant skills and experiences, and demonstrates their enthusiasm 
           for the position. Remember to address the hiring manager, showcase their 
           achievements, and explain how their qualifications align with the requirements 
-          of the job. Use a professional and engaging tone throughout the letter.`,
-      },
-      {
-        role: ChatCompletionRequestMessageRoleEnum.User,
-        content: `Job Description: ${jobDescription}`,
-      },
-      {
-        role: ChatCompletionRequestMessageRoleEnum.User,
-        content: `CV: ${cv}`,
+          of the job. Use a professional and engaging tone throughout the letter.
+
+Job Description: ${jobDescription}
+CV: ${cv}
+`,
       },
     ];
   }
+}
+
+function readFromStream(stream: ReadableStream): Promise<string> {
+  const reader = stream.getReader();
+  const chunks: Uint8Array[] = [];
+
+  return reader.read().then(function processText({ done, value }): any {
+    if (done) {
+      return Buffer.concat(chunks).toString("utf8");
+    }
+
+    if (value) {
+      chunks.push(value);
+    }
+
+    return reader.read().then(processText);
+  });
 }

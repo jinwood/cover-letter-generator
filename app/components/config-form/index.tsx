@@ -56,6 +56,12 @@ export default function ConfigForm() {
         />
       </div>
       <Button action={generate} text="Generate" color="white" />
+
+      {configCtx.coverLetter && (
+        <div>
+          <p>{configCtx.coverLetter}</p>
+        </div>
+      )}
     </div>
   );
 }

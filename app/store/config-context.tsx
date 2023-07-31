@@ -23,9 +23,6 @@ export function ConfigContextProvider({ children }: Props) {
   const [coverLetter, setCoverLetter] = useState("");
 
   function generateCoverLetter() {
-    console.log("ctx");
-    console.log(apiKey, cv, jobDescription);
-
     fetch("/api/generate", {
       method: "POST",
       body: JSON.stringify({
@@ -38,7 +35,11 @@ export function ConfigContextProvider({ children }: Props) {
       },
     })
       .then((response) => response.json())
-      .then((data) => setCoverLetter(data));
+      .then((data) => {
+        const { result } = data;
+        const { content } = result;
+        setCoverLetter(content);
+      });
   }
 
   const context = {
@@ -49,6 +50,7 @@ export function ConfigContextProvider({ children }: Props) {
     setCv,
     setJobDescription,
     generateCoverLetter,
+    coverLetter,
   };
 
   console.log(context);
