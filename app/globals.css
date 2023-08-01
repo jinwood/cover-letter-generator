@@ -6,12 +6,14 @@
     "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
 
   --color--eerie-black: #1c1c1c;
+  --color--jet: #393949;
   --color--platinum: #daddd8;
   --color--alabaster: #ecebe4;
   --color--anti-flash-white: #eef0f2;
   --color--flash-white: #fafaff;
 
-  --color--background: --var(var(--color--eerie-black));
+  --color--background: var(--color--eerie-black);
+  --color--border: var(--color--jet);
 
   --primary-glow: conic-gradient(
     from 180deg at 50% 50%,
@@ -46,7 +48,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: --var(var(--color--platinum));
+    --foreground-rgb: var(--color--platinum);
     --background-color: #1c1c1c;
     --primary-glow: radial-gradient(rgba(1, 65, 255, 0.4), rgba(1, 65, 255, 0));
     --secondary-glow: linear-gradient(
@@ -97,22 +99,45 @@ a {
   text-decoration: none;
 }
 
+h1 {
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
 }
 
+input,
+textarea {
+  outline: none;
+  user-select: none;
+}
+
 input {
-  border: 1px solid white;
+  border: 1px solid var(--color--border);
   border-radius: 4px;
-  -webkit-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1),
-    0 0 16px rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1), 0 0 16px rgba(0, 0, 0, 0.1);
-  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1), 0 0 16px rgba(0, 0, 0, 0.1);
   padding: 0.2rem;
   background: rgb(var(--background-start-rgb));
   margin: 0 0 10px 0;
+}
+
+input::placeholder {
+  font-weight: bold;
+  opacity: 0.4;
+  color: var(--color--platinum);
+  font-weight: 200;
+  font-size: 0.8rem;
+}
+
+input::selection {
+  border-color: var(--color--platinum);
+}
+
+input:focus {
+  border-color: var(--color--anti-flash-white);
 }
 
 textarea {
