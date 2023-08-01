@@ -27,7 +27,7 @@ export default function ConfigForm() {
   console.log(styles);
   return (
     <div className={styles["form--container"]}>
-      <div>
+      <div className={styles["form--input-group"]}>
         <label htmlFor="UserApiKey">Api Key: </label>
         <input
           type="text"
@@ -38,7 +38,7 @@ export default function ConfigForm() {
           }
         />
       </div>
-      <div>
+      <div className={styles["form--input-group"]}>
         <label htmlFor="CV">Your CV: </label>
         <textarea
           id="CV"
@@ -48,7 +48,8 @@ export default function ConfigForm() {
         />
       </div>
 
-      <div>
+      <div className={styles["form--input-group"]}>
+        {" "}
         <label htmlFor="JobDescription">Job Description: </label>
         <textarea
           id="JobDescription"
