@@ -18,6 +18,13 @@ async function returnError(message: String) {
 export async function POST(req: NextApiRequest) {
   const { body } = req;
 
+  /*
+  console.log("in");
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  console.log("out");
+  return NextResponse.json({ success: true });
+    */
+
   const rawData = await readFromStream(body);
   const { apiKey: tempKey, jobDescription, cv } = JSON.parse(rawData);
 

@@ -9,7 +9,7 @@ const ConfigContext = createContext({
   setApiKey: function (apiKey: string) {},
   setCv: function (cv: string) {},
   setJobDescription: function (jobDescription: string) {},
-  generateCoverLetter: function () {},
+  generateCoverLetter: () => Promise<any>,
 });
 
 interface Props {
@@ -22,8 +22,8 @@ export function ConfigContextProvider({ children }: Props) {
   const [jobDescription, setJobDescription] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
 
-  function generateCoverLetter() {
-    fetch("/api/generate", {
+  async function generateCoverLetter() {
+    const response = await fetch("/api/generate", {
       method: "POST",
       body: JSON.stringify({
         apiKey,
@@ -33,13 +33,20 @@ export function ConfigContextProvider({ children }: Props) {
       headers: {
         "Content-Type": "application/json",
       },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        const { result } = data;
-        const { content } = result;
-        setCoverLetter(content);
-      });
+    });
+
+    console.log("done in generate");
+
+    if (!response.ok) {
+      throw new Error(
+        `Server responded with ${response.status}: ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+    const { result } = data;
+    const { content } = result;
+    setCoverLetter(content);
   }
 
   const context = {

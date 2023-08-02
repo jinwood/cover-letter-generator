@@ -20,8 +20,8 @@ export default function ConfigForm() {
     configCtx.setJobDescription(value);
   }
 
-  function generate() {
-    configCtx.generateCoverLetter();
+  async function generate() {
+    await configCtx.generateCoverLetter();
   }
 
   console.log(styles);
