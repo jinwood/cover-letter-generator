@@ -1,14 +1,15 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./index.module.css";
 
 export interface Props {
   color: "white" | "blue";
   text: string;
+  disabled: boolean;
   action: () => Promise<any>;
 }
 
-export default function Button({ text, action }: Props) {
+export default function Button({ text, action, disabled }: Props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleAction = async () => {
@@ -26,7 +27,7 @@ export default function Button({ text, action }: Props) {
       <button
         onClick={handleAction}
         className={styles.btn}
-        disabled={isLoading}
+        disabled={isLoading || disabled}
       >
         {!isLoading && text}
         {isLoading && `Please wait`}

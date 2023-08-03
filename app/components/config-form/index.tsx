@@ -1,11 +1,20 @@
 "use client";
 import styles from "./index.module.css";
 import ConfigContext from "@/app/store/config-context";
-import { ChangeEvent, useContext } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import Button from "../button";
 
 export default function ConfigForm() {
   const configCtx = useContext(ConfigContext);
+  const [isValid, setIsValid] = useState(false);
+
+  const { cv, jobDescription } = configCtx;
+
+  useEffect(() => {
+    if (cv && jobDescription) {
+      setIsValid(true);
+    }
+  }, [cv, jobDescription]);
 
   function onUserApiKeyChange(value: string) {
     console.log(value);
@@ -58,7 +67,12 @@ export default function ConfigForm() {
           }
         />
       </div>
-      <Button action={generate} text="Generate" color="white" />
+      <Button
+        action={generate}
+        text="Generate"
+        color="white"
+        disabled={!isValid}
+      />
 
       {configCtx.coverLetter && (
         <div>
