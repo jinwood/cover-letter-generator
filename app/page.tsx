@@ -7,7 +7,7 @@ export default function Home() {
     <ConfigContextProvider>
       <main className={styles.main}>
         <div>
-          <h1>Generate a cover letter using ChatGPT</h1>
+          <h1>Generate a cover letter</h1>
           <ConfigForm />
         </div>
       </main>
