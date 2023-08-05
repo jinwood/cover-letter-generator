@@ -36,12 +36,16 @@ export default function ConfigForm() {
 
   console.log(styles);
   return (
-    <div className={styles["form--container"]}>
+    <form
+      action="/api/generate"
+      method="post"
+      className={styles["form--container"]}
+    >
       <div className={styles["form--input-group"]}>
-        <label htmlFor="UserApiKey">Api Key: </label>
+        <label htmlFor="api-key">Api Key: </label>
         <input
           type="text"
-          id="UserApiKey"
+          id="api-key"
           placeholder="Your api key"
           onChange={(e: ChangeEvent<HTMLInputElement>): void =>
             onUserApiKeyChange(e.target.value)
@@ -49,9 +53,9 @@ export default function ConfigForm() {
         />
       </div>
       <div className={styles["form--input-group"]}>
-        <label htmlFor="CV">Your CV: </label>
+        <label htmlFor="cv">Your CV: </label>
         <textarea
-          id="CV"
+          id="cv"
           onChange={(e: ChangeEvent<HTMLTextAreaElement>): void =>
             onCvChange(e.target.value)
           }
@@ -59,28 +63,22 @@ export default function ConfigForm() {
       </div>
 
       <div className={styles["form--input-group"]}>
-        {" "}
-        <label htmlFor="JobDescription">Job Description: </label>
+        <label htmlFor="job-description">Job Description: </label>
         <textarea
-          id="JobDescription"
+          id="job-description"
           onChange={(e: ChangeEvent<HTMLTextAreaElement>): void =>
             onJobDescriptionChange(e.target.value)
           }
         />
       </div>
       <Keywords />
-      <Button
-        action={generate}
-        text="Generate"
-        color="white"
-        disabled={!isValid}
-      />
+      <button type="submit">Submit</button>
 
       {configCtx.coverLetter && (
         <div>
           <p>{configCtx.coverLetter}</p>
         </div>
       )}
-    </div>
+    </form>
   );
 }
