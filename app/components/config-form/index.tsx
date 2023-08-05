@@ -3,6 +3,7 @@ import styles from "./index.module.css";
 import ConfigContext from "@/app/store/config-context";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import Button from "../button";
+import Keywords from "../keywords";
 
 export default function ConfigForm() {
   const configCtx = useContext(ConfigContext);
@@ -67,6 +68,7 @@ export default function ConfigForm() {
           }
         />
       </div>
+      <Keywords />
       <Button
         action={generate}
         text="Generate"
